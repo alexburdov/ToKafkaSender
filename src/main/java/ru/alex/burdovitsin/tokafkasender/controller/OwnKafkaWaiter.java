@@ -1,0 +1,32 @@
+package ru.alex.burdovitsin.tokafkasender.controller;
+
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.CountDownLatch;
+
+@Component
+public class OwnKafkaWaiter {
+    private CountDownLatch latch = new CountDownLatch(1);
+
+    private String payload;
+
+    @KafkaListener(topics = "test_1.0", containerFactory = "stringKafkaListenerContainerFactory")
+    public void receive(ConsumerRecord<?, ?> consumerRecord) {
+        payload = consumerRecord.toString();
+        latch.countDown();
+    }
+
+    public CountDownLatch getLatch() {
+        return latch;
+    }
+
+    public void resetLatch() {
+        latch = new CountDownLatch(1);
+    }
+
+    public String getPayload() {
+        return payload;
+    }
+}

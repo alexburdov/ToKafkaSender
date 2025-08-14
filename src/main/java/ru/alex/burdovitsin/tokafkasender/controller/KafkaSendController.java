@@ -25,7 +25,7 @@ public class KafkaSendController {
         kafkaTemplate.send(topicName, request);
     }
 
-    @PutMapping
+    @PutMapping(value = "/send")
     public void sendMessage(@RequestParam String topicName,
                             @RequestBody String message
     ) {
